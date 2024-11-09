@@ -22,7 +22,8 @@ public class MainManager : MonoBehaviour
     
     void Start()
     {
-        BestScoreText.text = $"Best Score: {GameManager.Instance.playerName}: 0";
+        GameManager.Instance.LoadBestPlayerData();
+        BestScoreText.text = $"Best Score: {GameManager.Instance.bestPlayerName}: {GameManager.Instance.bestPlayerScore}";
 
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
@@ -68,11 +69,18 @@ public class MainManager : MonoBehaviour
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+
+        if (m_Points > GameManager.Instance.bestPlayerScore)
+        {
+            BestScoreText.text = $"Best Score: {GameManager.Instance.playerName}: {m_Points}";
+        }
     }
 
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+
+        GameManager.Instance.SaveBestScore(m_Points);
     }
 }
